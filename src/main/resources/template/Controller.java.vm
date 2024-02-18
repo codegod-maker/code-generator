@@ -1,0 +1,78 @@
+package ${package}.${moduleName}.controller;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+
+import ${package}.${moduleName}.bean.${className};
+import ${package}.${moduleName}.service.${className}Service;
+import ${package}.${moduleName}.common.utils.R;
+import java.util.Arrays;
+
+@RestController
+@RequestMapping("/${classname}")
+public class ${className}Controller {
+    @Autowired
+    private ${className}Service ${classname}Service;
+
+    /**
+     * 列表
+     */
+    @PostMapping("/list/{pageNum}/{pageSize}")
+    public R list(@PathVariable("pageNum") Integer pageNum,@PathVariable("pageSize")Integer pageSize, @RequestBody(required = false) ${className} ${classname}){
+        LambdaQueryWrapper<${className}> lambdaQueryWrapper = new LambdaQueryWrapper();
+        Page<${className}> page=${classname}Service.page(new Page<${className}>(pageNum, pageSize).addOrder(OrderItem.asc("id")),lambdaQueryWrapper);
+        return R.ok(page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @GetMapping("/info/{${pk.attrname}}")
+    public R info(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}){
+		${className} ${classname} = ${classname}Service.getById(${pk.attrname});
+
+        return R.ok(${classname});
+    }
+
+    /**
+     * 保存
+     */
+    @PostMapping("/save")
+    public R save(@RequestBody ${className} ${classname}){
+		if(${classname}Service.save(${classname})){
+            return R.ok();
+        }
+
+        return R.error();
+    }
+
+    /**
+     * 修改
+     */
+    @PostMapping("/update")
+    public R update(@RequestBody ${className} ${classname}){
+		if(${classname}Service.updateById(${classname})){
+            return R.ok();
+        }
+
+        return R.error();
+    }
+
+    /**
+     * 删除
+     */
+    @GetMapping("/delete")
+    public R delete(@RequestParam("ids")  ${pk.attrType}[] ${pk.attrname}s){
+		if(${classname}Service.removeByIds(Arrays.asList(${pk.attrname}s))){
+            return R.ok();
+        }
+
+        return R.error();
+    }
+
+}
